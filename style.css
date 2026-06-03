@@ -163,11 +163,20 @@ button:hover {
 
 @media (max-width: 768px) {
   .totals {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    text-align: center;
-  }
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 10px 0 15px 0;
+}
+
+.totals div {
+  background: var(--bg-accent);
+  padding: 8px;
+  border-radius: var(--radius);
+  text-align: center;
+  font-size: var(--fs-s);
+  white-space: nowrap;
+}
 
   .log-item {
     flex-direction: column;
@@ -181,6 +190,18 @@ button:hover {
 }
 
 @media (max-width: 480px) {
+  .totals {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .totals {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 420px) {
   .totals {
     grid-template-columns: 1fr;
   }
