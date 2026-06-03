@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="uk">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>КБЖВ — канкулятор</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="icon.png">
+  <link rel="shortcut icon" href="icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="icon.png">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header>
+      <h1>КБЖВ калькулятор підсумку:</h1>
+      <p class="lead">Вставте уже скопійовані дані із сайту кбжв-блоки і отримайте денний підсумок кбжв</p>
+    </header>
+
+    <main>
+
+      <div class="paste-box">
+        <textarea id="input" placeholder="Вставте сюди:
+Продукт, для ### грам - ### ккал / ### білка / ### жирів / ### вуглеводів"></textarea>
+
+        <div class="buttons">
+          <button id="add">Додати</button>
+          <button id="reset">Очистити</button>
+        </div>
+      </div>
+
+      <section class="tracker">
+
+        <h2>Денний підсумок:</h2>
+
+        <div class="totals">
+          <div>Ккал: <span id="kcal">0</span></div>
+          <div>Б: <span id="protein">0</span> г</div>
+          <div>Ж: <span id="fat">0</span> г</div>
+          <div>В: <span id="carb">0</span> г</div>
+        </div>
+
+        <h3>Історія:</h3>
+        <div id="log"></div>
+
+      </section>
+
+    </main>
+
+  </div>
+</body>
+
+</html>
