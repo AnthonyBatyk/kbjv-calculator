@@ -160,3 +160,28 @@ button:hover {
 .remove:hover {
   background: #ff2e2e;
 }
+
+@media (max-width: 768px) {
+  .totals {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .log-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .remove {
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  .totals {
+    grid-template-columns: 1fr;
+  }
+}
