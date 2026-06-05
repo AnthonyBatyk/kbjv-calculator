@@ -206,3 +206,17 @@ button:hover {
     grid-template-columns: 1fr;
   }
 }
+
+/* ===== BUTTON STATES ===== */
+
+button.success {
+  background: #43b581 !important;
+}
+
+button.error {
+  background: #ed4245 !important;
+}
+
+button.copied {
+  background: #43b581 !important;
+}
