@@ -16,7 +16,7 @@ function parseLine(line) {
   return {
     kcal: kcal ? +kcal[1] : 0,
     protein: protein ? +protein[1] : 0,
-    fat: fat ? +protein[1] : 0,
+    fat: fat ? +fat[1] : 0,
     carb: carb ? +carb[1] : 0
   };
 }
