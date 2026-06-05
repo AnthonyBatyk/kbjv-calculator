@@ -88,4 +88,33 @@ document.getElementById("reset").onclick = () => {
   render();
 };
 
+/* КОПІЮВАННЯ ПІДСУМКУ */
+document.getElementById("copy-total").onclick = () => {
+
+  const today = new Date();
+
+  const day = String(today.getDate()).padStart(2, '0');
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const year = today.getFullYear();
+
+  const text =
+    `Денний підсумок за ${day}.${month}.${year} - ` +
+    `${total.kcal.toFixed(0)} ккал / ` +
+    `${total.protein.toFixed(1)} білка / ` +
+    `${total.fat.toFixed(1)} жирів / ` +
+    `${total.carb.toFixed(1)} вуглеводів`;
+
+  navigator.clipboard.writeText(text);
+
+  const btn = document.getElementById("copy-total");
+
+  btn.textContent = "Скопійовано ✓";
+  btn.classList.add("copied");
+
+  setTimeout(() => {
+    btn.textContent = "Скопіювати підсумок";
+    btn.classList.remove("copied");
+  }, 1500);
+};
+
 render();
