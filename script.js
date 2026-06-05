@@ -16,7 +16,7 @@ function parseLine(line) {
   return {
     kcal: kcal ? +kcal[1] : 0,
     protein: protein ? +protein[1] : 0,
-    fat: fat ? +fat[1] : 0,
+    fat: fat ? +protein[1] : 0,
     carb: carb ? +carb[1] : 0
   };
 }
@@ -35,8 +35,10 @@ function render() {
   `).join("");
 }
 
-/* ДОДАВАННЯ */
+/* ================= ADD ================= */
 document.getElementById("add").onclick = () => {
+  const btn = document.getElementById("add");
+
   const text = document.getElementById("input").value.trim();
   if (!text) return;
 
@@ -61,9 +63,19 @@ document.getElementById("add").onclick = () => {
 
   document.getElementById("input").value = "";
   render();
+
+  const original = btn.textContent;
+
+  btn.textContent = "Додано ✓";
+  btn.classList.add("success");
+
+  setTimeout(() => {
+    btn.textContent = original;
+    btn.classList.remove("success");
+  }, 1200);
 };
 
-/* ВІДНЯТТЯ (лог + сума) */
+/* ================= REMOVE ================= */
 document.getElementById("log").addEventListener("click", (e) => {
   const btn = e.target.closest(".remove");
   if (!btn) return;
@@ -81,18 +93,31 @@ document.getElementById("log").addEventListener("click", (e) => {
   render();
 });
 
-/* RESET */
+/* ================= RESET ================= */
 document.getElementById("reset").onclick = () => {
+  const btn = document.getElementById("reset");
+
   total = { kcal: 0, protein: 0, fat: 0, carb: 0 };
   log.length = 0;
+
   render();
+
+  const original = btn.textContent;
+
+  btn.textContent = "Очищено ✕";
+  btn.classList.add("error");
+
+  setTimeout(() => {
+    btn.textContent = original;
+    btn.classList.remove("error");
+  }, 1200);
 };
 
-/* КОПІЮВАННЯ ПІДСУМКУ */
+/* ================= COPY TOTAL ================= */
 document.getElementById("copy-total").onclick = () => {
+  const btn = document.getElementById("copy-total");
 
   const today = new Date();
-
   const day = String(today.getDate()).padStart(2, '0');
   const month = String(today.getMonth() + 1).padStart(2, '0');
   const year = today.getFullYear();
@@ -106,15 +131,15 @@ document.getElementById("copy-total").onclick = () => {
 
   navigator.clipboard.writeText(text);
 
-  const btn = document.getElementById("copy-total");
+  const original = btn.textContent;
 
   btn.textContent = "Скопійовано ✓";
-  btn.classList.add("copied");
+  btn.classList.add("success");
 
   setTimeout(() => {
-    btn.textContent = "Скопіювати підсумок";
-    btn.classList.remove("copied");
-  }, 1500);
+    btn.textContent = original;
+    btn.classList.remove("success");
+  }, 1200);
 };
 
 render();
