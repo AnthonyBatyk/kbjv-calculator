@@ -7,7 +7,7 @@ let total = {
 
 const log = [];
 
-/* ================= SAVE / LOAD ================= */
+/* ================= STORAGE ================= */
 
 function saveData() {
   localStorage.setItem("kbjv-total", JSON.stringify(total));
@@ -15,21 +15,32 @@ function saveData() {
 }
 
 function loadData() {
-  const savedTotal = localStorage.getItem("kbjv-total");
-  const savedLog = localStorage.getItem("kbjv-log");
+  try {
+    const savedTotal = localStorage.getItem("kbjv-total");
+    const savedLog = localStorage.getItem("kbjv-log");
 
-  if (savedTotal) {
-    total = JSON.parse(savedTotal);
-  }
+    if (savedTotal) {
+      const parsedTotal = JSON.parse(savedTotal);
 
-  if (savedLog) {
-    const parsed = JSON.parse(savedLog);
-    log.length = 0;
-    log.push(...parsed);
+      total.kcal = parsedTotal.kcal || 0;
+      total.protein = parsedTotal.protein || 0;
+      total.fat = parsedTotal.fat || 0;
+      total.carb = parsedTotal.carb || 0;
+    }
+
+    if (savedLog) {
+      const parsedLog = JSON.parse(savedLog);
+
+      log.length = 0;
+      log.push(...parsedLog);
+    }
+  } catch (e) {
+    console.error("Storage error:", e);
+    localStorage.clear();
   }
 }
 
-/* ================= PARSER (FIXED) ================= */
+/* ================= PARSER ================= */
 
 function parseLine(line) {
   const kcal = line.match(/(\d+(?:\.\d+)?)\s*ккал/);
@@ -71,7 +82,7 @@ document.getElementById("add").onclick = () => {
 
   const lines = text.split("\n");
 
-  lines.forEach(line => {
+  for (const line of lines) {
     const p = parseLine(line);
 
     total.kcal += p.kcal;
@@ -86,7 +97,7 @@ document.getElementById("add").onclick = () => {
       fat: p.fat,
       carb: p.carb
     });
-  });
+  }
 
   document.getElementById("input").value = "";
 
@@ -144,7 +155,7 @@ document.getElementById("reset").onclick = () => {
   }, 1200);
 };
 
-/* ================= COPY TOTAL ================= */
+/* ================= COPY ================= */
 
 document.getElementById("copy-total").onclick = () => {
   const btn = document.getElementById("copy-total");
@@ -173,7 +184,9 @@ document.getElementById("copy-total").onclick = () => {
   }, 1200);
 };
 
-/* ================= START ================= */
+/* ================= INIT ================= */
 
-loadData();
-render();
+document.addEventListener("DOMContentLoaded", () => {
+  loadData();
+  render();
+});
