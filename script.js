@@ -7,6 +7,8 @@ let total = {
 
 const log = [];
 
+/* ================= SAVE / LOAD ================= */
+
 function saveData() {
   localStorage.setItem("kbjv-total", JSON.stringify(total));
   localStorage.setItem("kbjv-log", JSON.stringify(log));
@@ -21,26 +23,29 @@ function loadData() {
   }
 
   if (savedLog) {
-    const parsedLog = JSON.parse(savedLog);
-
+    const parsed = JSON.parse(savedLog);
     log.length = 0;
-    log.push(...parsedLog);
+    log.push(...parsed);
   }
 }
 
+/* ================= PARSER (FIXED) ================= */
+
 function parseLine(line) {
-  const kcal = line.match(/(\d+)\s*ккал/);
-  const protein = line.match(/([\d.]+)\s*біл/);
-  const fat = line.match(/([\d.]+)\s*жир/);
-  const carb = line.match(/([\d.]+)\s*вугл/);
+  const kcal = line.match(/(\d+(?:\.\d+)?)\s*ккал/);
+  const protein = line.match(/(\d+(?:\.\d+)?)\s*біл/);
+  const fat = line.match(/(\d+(?:\.\d+)?)\s*жир/);
+  const carb = line.match(/(\d+(?:\.\d+)?)\s*вугл/);
 
   return {
-    kcal: kcal ? +kcal[1] : 0,
-    protein: protein ? +protein[1] : 0,
-    fat: fat ? +fat[1] : 0,
-    carb: carb ? +carb[1] : 0
+    kcal: kcal ? Number(kcal[1]) : 0,
+    protein: protein ? Number(protein[1]) : 0,
+    fat: fat ? Number(fat[1]) : 0,
+    carb: carb ? Number(carb[1]) : 0
   };
 }
+
+/* ================= RENDER ================= */
 
 function render() {
   document.getElementById("kcal").textContent = total.kcal.toFixed(0);
@@ -57,10 +62,11 @@ function render() {
 }
 
 /* ================= ADD ================= */
+
 document.getElementById("add").onclick = () => {
   const btn = document.getElementById("add");
-
   const text = document.getElementById("input").value.trim();
+
   if (!text) return;
 
   const lines = text.split("\n");
@@ -88,7 +94,6 @@ document.getElementById("add").onclick = () => {
   saveData();
 
   const original = btn.textContent;
-
   btn.textContent = "Додано ✓";
   btn.classList.add("success");
 
@@ -99,11 +104,12 @@ document.getElementById("add").onclick = () => {
 };
 
 /* ================= REMOVE ================= */
+
 document.getElementById("log").addEventListener("click", (e) => {
   const btn = e.target.closest(".remove");
   if (!btn) return;
 
-  const index = +btn.dataset.index;
+  const index = Number(btn.dataset.index);
   const item = log[index];
 
   total.kcal -= item.kcal;
@@ -118,23 +124,17 @@ document.getElementById("log").addEventListener("click", (e) => {
 });
 
 /* ================= RESET ================= */
+
 document.getElementById("reset").onclick = () => {
   const btn = document.getElementById("reset");
 
-  total = {
-    kcal: 0,
-    protein: 0,
-    fat: 0,
-    carb: 0
-  };
-
+  total = { kcal: 0, protein: 0, fat: 0, carb: 0 };
   log.length = 0;
 
   render();
   saveData();
 
   const original = btn.textContent;
-
   btn.textContent = "Очищено ✕";
   btn.classList.add("error");
 
@@ -145,13 +145,14 @@ document.getElementById("reset").onclick = () => {
 };
 
 /* ================= COPY TOTAL ================= */
+
 document.getElementById("copy-total").onclick = () => {
   const btn = document.getElementById("copy-total");
 
-  const today = new Date();
-  const day = String(today.getDate()).padStart(2, "0");
-  const month = String(today.getMonth() + 1).padStart(2, "0");
-  const year = today.getFullYear();
+  const d = new Date();
+  const day = String(d.getDate()).padStart(2, "0");
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const year = d.getFullYear();
 
   const text =
     `Денний підсумок за ${day}.${month}.${year} - ` +
@@ -163,7 +164,6 @@ document.getElementById("copy-total").onclick = () => {
   navigator.clipboard.writeText(text);
 
   const original = btn.textContent;
-
   btn.textContent = "Скопійовано ✓";
   btn.classList.add("success");
 
@@ -174,5 +174,6 @@ document.getElementById("copy-total").onclick = () => {
 };
 
 /* ================= START ================= */
+
 loadData();
 render();
