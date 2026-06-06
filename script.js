@@ -7,6 +7,27 @@ let total = {
 
 const log = [];
 
+function saveData() {
+  localStorage.setItem("kbjv-total", JSON.stringify(total));
+  localStorage.setItem("kbjv-log", JSON.stringify(log));
+}
+
+function loadData() {
+  const savedTotal = localStorage.getItem("kbjv-total");
+  const savedLog = localStorage.getItem("kbjv-log");
+
+  if (savedTotal) {
+    total = JSON.parse(savedTotal);
+  }
+
+  if (savedLog) {
+    const parsedLog = JSON.parse(savedLog);
+
+    log.length = 0;
+    log.push(...parsedLog);
+  }
+}
+
 function parseLine(line) {
   const kcal = line.match(/(\d+)\s*ккал/);
   const protein = line.match(/([\d.]+)\s*біл/);
@@ -62,7 +83,9 @@ document.getElementById("add").onclick = () => {
   });
 
   document.getElementById("input").value = "";
+
   render();
+  saveData();
 
   const original = btn.textContent;
 
@@ -91,16 +114,24 @@ document.getElementById("log").addEventListener("click", (e) => {
   log.splice(index, 1);
 
   render();
+  saveData();
 });
 
 /* ================= RESET ================= */
 document.getElementById("reset").onclick = () => {
   const btn = document.getElementById("reset");
 
-  total = { kcal: 0, protein: 0, fat: 0, carb: 0 };
+  total = {
+    kcal: 0,
+    protein: 0,
+    fat: 0,
+    carb: 0
+  };
+
   log.length = 0;
 
   render();
+  saveData();
 
   const original = btn.textContent;
 
@@ -118,8 +149,8 @@ document.getElementById("copy-total").onclick = () => {
   const btn = document.getElementById("copy-total");
 
   const today = new Date();
-  const day = String(today.getDate()).padStart(2, '0');
-  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, "0");
+  const month = String(today.getMonth() + 1).padStart(2, "0");
   const year = today.getFullYear();
 
   const text =
@@ -142,4 +173,6 @@ document.getElementById("copy-total").onclick = () => {
   }, 1200);
 };
 
+/* ================= START ================= */
+loadData();
 render();
